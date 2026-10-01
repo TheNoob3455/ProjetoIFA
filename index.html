@@ -1,37 +1,715 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meu Restaurante</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #f4f4f9;
-      color: #333;
-    }
-    .card {
-      text-align: center;
-      padding: 40px;
-      background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    }
-    h1 {
-      color: #e63946;
-      margin-bottom: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriMath - A Matemática na Nutrição</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            800: '#166534',
+                        },
+                        math: {
+                            50: '#eff6ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .recipe-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .recipe-card:hover {
+            transform: translateY(-6px);
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
-<body>
-  <div class="card">
-    <h1>Olá mundo!</h1>
-    <p>Bem-vindo ao site.</p>
-  </div>
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between">
+
+    <!-- Navigation Bar -->
+    <nav class="sticky top-0 z-40 bg-white/80 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-500 to-math-500 flex items-center justify-center text-white font-black text-xl shadow-md">
+                        <i class="fa-solid font-bold fa-calculator text-lg"></i>
+                    </div>
+                    <span class="font-extrabold text-xl bg-gradient-to-r from-brand-700 to-math-600 bg-clip-text text-transparent">
+                        Nutri<span class="text-math-600">Math</span>
+                    </span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
+                    <a href="#hero" class="hover:text-brand-600 transition">Início</a>
+                    <a href="#receitas" class="hover:text-brand-600 transition">Receitas Comparativas</a>
+                    <a href="#matematica" class="hover:text-brand-600 transition">A Matemática da Nutrição</a>
+                    <a href="#sobre" class="hover:text-brand-600 transition">Projeto Escolar</a>
+                </div>
+                <button onclick="scrollToSection('receitas')" class="bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm px-4 py-2.5 rounded-xl shadow-sm transition-all hover:shadow-md flex items-center gap-2">
+                    <i class="fa-solid fa-utensils text-xs"></i> Ver Receitas
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header id="hero" class="relative overflow-hidden bg-gradient-to-b from-brand-50/60 via-slate-50 to-slate-50 pt-12 pb-20 lg:pt-20 lg:pb-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-100/80 border border-brand-200 text-brand-800 text-xs font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-graduation-cap"></i> Projeto Interdisciplinar de Escola
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 leading-tight tracking-tight">
+                        Transformando Receitas com <span class="bg-gradient-to-r from-brand-600 to-math-600 bg-clip-text text-transparent">Proporção e Ciência</span>
+                    </h1>
+                    <p class="text-lg text-slate-600 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+                        Como a matemática pode nos ajudar a comer de forma mais saudável? Nosso projeto escolar analisa a razão de ingredientes, calcula equivalências nutricionais e demonstra como pequenas variações de porcentagem transformam refeições normais em opções funcionais.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4 justify-center lg:justify-start pt-2">
+                        <a href="#receitas" class="bg-brand-600 hover:bg-brand-700 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-brand-500/20 hover:shadow-xl transition-all flex items-center gap-2">
+                            Explorar Comparativo <i class="fa-solid fa-arrow-right text-sm"></i>
+                        </a>
+                        <a href="#matematica" class="bg-white hover:bg-slate-100 text-slate-700 font-bold px-6 py-3.5 rounded-xl border border-slate-200 shadow-sm transition-all flex items-center gap-2">
+                            Aprender os Cálculos <i class="fa-solid fa-square-root-variable text-math-500"></i>
+                        </a>
+                    </div>
+
+                    <!-- Highlight Stats -->
+                    <div class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-200/80">
+                        <div class="text-center lg:text-left">
+                            <span class="block text-2xl lg:text-3xl font-extrabold text-brand-600">-40%</span>
+                            <span class="text-xs text-slate-500 font-medium">Média de Calorias Reduzidas</span>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <span class="block text-2xl lg:text-3xl font-extrabold text-math-600">100%</span>
+                            <span class="text-xs text-slate-500 font-medium">Precisão Matemática</span>
+                        </div>
+                        <div class="text-center lg:text-left">
+                            <span class="block text-2xl lg:text-3xl font-extrabold text-amber-500">2x</span>
+                            <span class="text-xs text-slate-500 font-medium">Mais Fibras & Nutrientes</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hero Interactive Preview Card -->
+                <div class="lg:col-span-5">
+                    <div class="relative mx-auto max-w-md lg:max-w-none">
+                        <div class="absolute -top-4 -left-4 w-72 h-72 bg-brand-200 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-pulse"></div>
+                        <div class="absolute -bottom-4 -right-4 w-72 h-72 bg-math-200 rounded-full mix-blend-multiply filter blur-2xl opacity-70 animate-pulse" style="animation-delay: 1s"></div>
+                        
+                        <div class="relative bg-white p-6 rounded-3xl shadow-xl border border-slate-100">
+                            <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                                <span class="font-bold text-slate-700 flex items-center gap-2 text-sm">
+                                    <i class="fa-solid fa-scale-balanced text-brand-500"></i> Simulação de Regra de Três
+                                </span>
+                                <span class="text-xs font-semibold px-2.5 py-1 bg-math-50 text-math-600 rounded-full">Exemplo Prático</span>
+                            </div>
+
+                            <div class="space-y-4 text-sm">
+                                <p class="text-slate-600 text-xs">Ajuste o número de porções para ver os ingredientes da receita recalculados em tempo real:</p>
+                                
+                                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+                                    <div class="flex justify-between items-center mb-3">
+                                        <span class="font-bold text-slate-700 text-xs uppercase tracking-wide">Porções Desejadas:</span>
+                                        <div class="flex items-center gap-3 bg-white px-3 py-1 rounded-xl border border-slate-200 shadow-sm">
+                                            <button onclick="updateHeroServings(-1)" class="text-slate-500 hover:text-brand-600 font-bold text-lg">-</button>
+                                            <span id="heroServings" class="font-black text-brand-600 w-4 text-center">4</span>
+                                            <button onclick="updateHeroServings(1)" class="text-slate-500 hover:text-brand-600 font-bold text-lg">+</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2 text-xs">
+                                        <div class="flex justify-between p-2 bg-white rounded-lg">
+                                            <span>Farinha de Aveia (Base: 100g/2 porções)</span>
+                                            <strong id="heroIng1" class="text-math-600">200g</strong>
+                                        </div>
+                                        <div class="flex justify-between p-2 bg-white rounded-lg">
+                                            <span>Cacau em Pó (Base: 25g/2 porções)</span>
+                                            <strong id="heroIng2" class="text-math-600">50g</strong>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-3 bg-brand-50 text-brand-800 rounded-xl text-xs flex items-center gap-2">
+                                    <i class="fa-solid fa-lightbulb text-brand-500 text-base"></i>
+                                    <span>Fórmula: <strong>Qtd Final = (Qtd Base ÷ Porção Base) × Nova Porção</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Recipes Section -->
+    <section id="receitas" class="py-16 bg-white border-t border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900 tracking-tight">Catálogo de Receitas Comparativas</h2>
+                    <p class="text-slate-500 text-sm mt-1">Explore as receitas clássicas e descubra suas equivalências nutricionais em versões saudáveis.</p>
+                </div>
+                
+                <!-- Filters -->
+                <div class="flex items-center gap-2 bg-slate-100 p-1.5 rounded-2xl self-start md:self-auto">
+                    <button onclick="filterRecipes('all')" id="btn-filter-all" class="filter-btn active px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white text-slate-800 shadow-sm">
+                        Todas
+                    </button>
+                    <button onclick="filterRecipes('tradicional')" id="btn-filter-tradicional" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900">
+                        Tradicionais
+                    </button>
+                    <button onclick="filterRecipes('saudavel')" id="btn-filter-saudavel" class="filter-btn px-4 py-2 rounded-xl text-xs font-bold transition-all text-slate-600 hover:text-slate-900">
+                        Fit / Saudáveis
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recipes Grid -->
+            <div id="recipesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Javascript dynamically renders cards here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Math & Nutrition Educational Section -->
+    <section id="matematica" class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-math-600 font-bold text-xs uppercase tracking-wider bg-math-50 px-3 py-1 rounded-full border border-math-200">Fundamentação Teórica</span>
+                <h2 class="text-3xl font-extrabold text-slate-900 mt-3">A Matemática da Nutrição</h2>
+                <p class="text-slate-600 text-sm mt-2">Como os valores nas tabelas nutricionais são realmente calculados? Veja as fórmulas matemáticas usadas na nossa dieta.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Concept Card 1 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-math-50 text-math-600 rounded-xl flex items-center justify-center font-bold text-xl mb-4">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Equivalência Calórica (Atwater)</h3>
+                    <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                        Cada grama de macronutriente fornece uma quantidade exata de energia (quilocalorias):
+                    </p>
+                    <ul class="space-y-2 text-xs font-medium text-slate-700 bg-slate-50 p-3 rounded-xl">
+                        <li class="flex justify-between"><span>Carboidratos:</span> <strong class="text-math-600">4 kcal / g</strong></li>
+                        <li class="flex justify-between"><span>Proteínas:</span> <strong class="text-math-600">4 kcal / g</strong></li>
+                        <li class="flex justify-between"><span>Gorduras:</span> <strong class="text-amber-600">9 kcal / g</strong></li>
+                    </ul>
+                </div>
+
+                <!-- Concept Card 2 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-brand-50 text-brand-600 rounded-xl flex items-center justify-center font-bold text-xl mb-4">
+                        <i class="fa-solid fa-percent"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Porcentagem de Redução</h3>
+                    <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                        Para calcular o ganho nutricional ao trocar ingredientes clássicos por versões funcionais:
+                    </p>
+                    <div class="bg-slate-50 p-3 rounded-xl text-xs font-mono text-slate-800 mb-2 border border-slate-200">
+                        Redução (%) = [(Valor Trad. - Valor Fit) / Valor Trad.] × 100
+                    </div>
+                    <p class="text-[11px] text-slate-500">Ex: Trocar açúcar por xilitol em uma receita pode reduzir o impacto glicêmico em até 40%.</p>
+                </div>
+
+                <!-- Concept Card 3 -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                    <div class="w-12 h-12 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center font-bold text-xl mb-4">
+                        <i class="fa-solid fa-pie-chart"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800 mb-2">Razão de Macronutrientes</h3>
+                    <p class="text-slate-600 text-xs leading-relaxed mb-4">
+                        A proporção equilibrada para uma alimentação saudável baseia-se em uma distribuição percentual diária:
+                    </p>
+                    <ul class="space-y-2 text-xs font-medium text-slate-700 bg-slate-50 p-3 rounded-xl">
+                        <li class="flex justify-between"><span>Carboidratos:</span> <strong>50% a 60%</strong></li>
+                        <li class="flex justify-between"><span>Proteínas:</span> <strong>15% a 20%</strong></li>
+                        <li class="flex justify-between"><span>Gorduras Boas:</span> <strong>25% a 30%</strong></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Info Section -->
+    <section id="sobre" class="py-16 bg-white border-t border-slate-200">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <span class="text-brand-600 font-bold text-xs uppercase tracking-wider">Feira de Ciências / Matemática</span>
+            <h2 class="text-3xl font-extrabold text-slate-900 mt-2 mb-4">Sobre este Projeto Escolar</h2>
+            <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                Este site foi desenvolvido como um trabalho prático interdisciplinar unindo <strong>Matemática</strong> e <strong>Educação Física / Biologia</strong>. Nosso objetivo é demonstrar que os cálculos matemáticos aprendidos em sala de aula (como proporcionalidade, regra de três, estatística e porcentagem) são ferramentas indispensáveis para escolhas nutricionais conscientes no nosso dia a dia.
+            </p>
+            <div class="inline-flex items-center gap-4 bg-slate-50 border border-slate-200 px-6 py-3 rounded-2xl text-xs text-slate-600">
+                <span><i class="fa-solid fa-school text-brand-500 mr-1"></i> Projeto de Matemática Aplicada</span>
+                <span>•</span>
+                <span><i class="fa-solid fa-code text-math-500 mr-1"></i> Desenvolvido em HTML/CSS/JS</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 text-slate-400 py-8 text-xs border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 text-center flex flex-col md:flex-row items-center justify-between gap-4">
+            <div>
+                <p class="font-bold text-white text-sm">NutriMath © 2026</p>
+                <p class="mt-1">Projeto Escolar de Nutrição e Matemática.</p>
+            </div>
+            <p class="text-slate-500">Pronto para hospedagem no GitHub Pages / Render</p>
+        </div>
+    </footer>
+
+    <!-- Recipe Detail Modal -->
+    <div id="recipeModal" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-4xl rounded-3xl shadow-2xl overflow-hidden my-8 max-h-[90vh] flex flex-col transform transition-all">
+            
+            <!-- Modal Header -->
+            <div class="relative bg-slate-900 text-white p-6 flex items-start justify-between">
+                <div>
+                    <span id="modalCategoryBadge" class="text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full bg-brand-500 text-white mb-2 inline-block">
+                        Saudável
+                    </span>
+                    <h2 id="modalTitle" class="text-2xl sm:text-3xl font-extrabold text-white">Nome da Receita</h2>
+                    <p id="modalSubtitle" class="text-slate-400 text-xs mt-1">Subtítulo explicativo</p>
+                </div>
+                <button onclick="closeModal()" class="w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Scrollable) -->
+            <div class="p-6 overflow-y-auto space-y-8 text-slate-700">
+                
+                <!-- Dynamic Interactive Calculator Box -->
+                <div class="bg-gradient-to-r from-brand-50 to-math-50 p-6 rounded-2xl border border-brand-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h4 class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-calculator text-math-600"></i> Calculadora Proporcional de Ingredientes
+                        </h4>
+                        <p class="text-xs text-slate-600 mt-1">Altere o número de porções para aplicar a regra de três automaticamente:</p>
+                    </div>
+
+                    <div class="flex items-center gap-3 bg-white px-4 py-2 rounded-xl shadow-sm border border-slate-200 self-start sm:self-auto">
+                        <span class="text-xs font-bold text-slate-500">Porções:</span>
+                        <button onclick="updateModalServings(-1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold flex items-center justify-center text-sm transition">-</button>
+                        <span id="modalServings" class="font-black text-brand-600 text-base min-w-[20px] text-center">2</span>
+                        <button onclick="updateModalServings(1)" class="w-7 h-7 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold flex items-center justify-center text-sm transition">+</button>
+                    </div>
+                </div>
+
+                <!-- Two Columns: Ingredients & Instructions -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Ingredients List -->
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base mb-4 flex items-center gap-2 border-b pb-2">
+                            <i class="fa-solid fa-list-check text-brand-600"></i> Ingredientes Recalculados
+                        </h3>
+                        <ul id="modalIngredients" class="space-y-2 text-xs">
+                            <!-- Dynamic Javascript -->
+                        </ul>
+                    </div>
+
+                    <!-- Steps -->
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-base mb-4 flex items-center gap-2 border-b pb-2">
+                            <i class="fa-solid fa-kitchen-set text-math-600"></i> Modo de Preparo
+                        </h3>
+                        <ol id="modalSteps" class="space-y-3 text-xs list-decimal list-inside text-slate-600">
+                            <!-- Dynamic Javascript -->
+                        </ol>
+                    </div>
+                </div>
+
+                <!-- Nutrition Values Section -->
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200">
+                    <h3 class="font-bold text-slate-900 text-base mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-chart-pie text-amber-500"></i> Tabela Nutricional (por porção)
+                    </h3>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 text-center">
+                        <div class="bg-white p-3 rounded-xl border border-slate-200/80">
+                            <span class="block text-[10px] uppercase font-bold text-slate-400">Calorias</span>
+                            <span id="modalKcal" class="text-lg font-extrabold text-slate-800">0 kcal</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-slate-200/80">
+                            <span class="block text-[10px] uppercase font-bold text-slate-400">Carboidratos</span>
+                            <span id="modalCarbs" class="text-lg font-extrabold text-math-600">0g</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-slate-200/80">
+                            <span class="block text-[10px] uppercase font-bold text-slate-400">Proteínas</span>
+                            <span id="modalProtein" class="text-lg font-extrabold text-brand-600">0g</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-slate-200/80">
+                            <span class="block text-[10px] uppercase font-bold text-slate-400">Gorduras</span>
+                            <span id="modalFat" class="text-lg font-extrabold text-amber-500">0g</span>
+                        </div>
+                        <div class="bg-white p-3 rounded-xl border border-slate-200/80 col-span-2 sm:col-span-1">
+                            <span class="block text-[10px] uppercase font-bold text-slate-400">Fibras</span>
+                            <span id="modalFiber" class="text-lg font-extrabold text-emerald-600">0g</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Math Focus Explanation -->
+                <div class="bg-math-50/50 p-5 rounded-2xl border border-math-100 text-xs space-y-2">
+                    <h4 class="font-bold text-math-700 flex items-center gap-2">
+                        <i class="fa-solid fa-square-root-variable"></i> Análise Matemática da Receita
+                    </h4>
+                    <p id="modalMathNote" class="text-slate-600 leading-relaxed">
+                        Explicação matemática de redução calórica e proporção de substituição.
+                    </p>
+                </div>
+
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-slate-50 border-t border-slate-200 p-4 text-right">
+                <button onclick="closeModal()" class="px-5 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold rounded-xl text-xs transition">
+                    Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Database of recipes (Traditional vs Healthy Pairs)
+        const recipes = [
+            {
+                id: 'brownie-tradicional',
+                pairId: 1,
+                type: 'tradicional',
+                title: 'Brownie Tradicional',
+                subtitle: 'Versão Clássica rica em açúcar e manteiga',
+                category: 'Sobremesa',
+                image: 'https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=600&q=80',
+                prepTime: '35 min',
+                baseServings: 4,
+                kcal: 420,
+                carbs: 58,
+                protein: 4,
+                fat: 20,
+                fiber: 1.5,
+                ingredients: [
+                    { name: 'Açúcar Refinado', baseQty: 200, unit: 'g' },
+                    { name: 'Manteiga Sem Sal', baseQty: 120, unit: 'g' },
+                    { name: 'Farinha de Trigo', baseQty: 100, unit: 'g' },
+                    { name: 'Chocolate em Pó 50%', baseQty: 80, unit: 'g' },
+                    { name: 'Ovos Inteiros', baseQty: 2, unit: 'unid' }
+                ],
+                steps: [
+                    'Derreta a manteiga com o chocolate em pó.',
+                    'Bata os ovos com o açúcar refinado até formar um creme claro.',
+                    'Misture tudo delicadamente com a farinha de trigo.',
+                    'Asse a 180°C por 25 minutos em fôrma untada.'
+                ],
+                mathNote: 'Esta receita possui alta densidade calórica vinda de lipídios (manteiga) e carboidratos simples (açúcar refinado). Cerca de 43% das calorias totais vêm de gorduras saturadas.'
+            },
+            {
+                id: 'brownie-fit',
+                pairId: 1,
+                type: 'saudavel',
+                title: 'Brownie Fit de Cacau & Aveia',
+                subtitle: 'Versão funcional com farinha integral e sem açúcar',
+                category: 'Sobremesa Fit',
+                image: 'https://images.unsplash.com/photo-1515037893149-de7f840978e2?auto=format&fit=crop&w=600&q=80',
+                prepTime: '30 min',
+                baseServings: 4,
+                kcal: 210,
+                carbs: 26,
+                protein: 8,
+                fat: 7,
+                fiber: 6.2,
+                ingredients: [
+                    { name: 'Açúcar de Coco ou Xilitol', baseQty: 80, unit: 'g' },
+                    { name: 'Óleo de Coco', baseQty: 30, unit: 'g' },
+                    { name: 'Farinha de Aveia', baseQty: 100, unit: 'g' },
+                    { name: 'Cacau 100% em Pó', baseQty: 50, unit: 'g' },
+                    { name: 'Ovos Inteiros', baseQty: 2, unit: 'unid' }
+                ],
+                steps: [
+                    'Misture os ingredientes úmidos (ovos e óleo de coco).',
+                    'Adicione os ingredientes secos (aveia, cacau e xilitol) e mexa bem.',
+                    'Despeje numa fôrma com papel manteiga.',
+                    'Asse a 180°C por 20 minutos.'
+                ],
+                mathNote: 'Redução de 50% de calorias em relação ao brownie tradicional! A substituição do trigo por aveia aumentou o teor de fibras em 313%.'
+            },
+            {
+                id: 'panqueca-tradicional',
+                pairId: 2,
+                type: 'tradicional',
+                title: 'Panqueca Americana Doce',
+                subtitle: 'Massa leve com farinha branca e xarope',
+                category: 'Café da Manhã',
+                image: 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?auto=format&fit=crop&w=600&q=80',
+                prepTime: '20 min',
+                baseServings: 2,
+                kcal: 380,
+                carbs: 65,
+                protein: 7,
+                fat: 10,
+                fiber: 1.0,
+                ingredients: [
+                    { name: 'Farinha de Trigo', baseQty: 150, unit: 'g' },
+                    { name: 'Leite Integral', baseQty: 150, unit: 'ml' },
+                    { name: 'Açúcar Cristal', baseQty: 40, unit: 'g' },
+                    { name: 'Manteiga', baseQty: 20, unit: 'g' },
+                    { name: 'Ovo', baseQty: 1, unit: 'unid' }
+                ],
+                steps: [
+                    'Bata todos os ingredientes no liquidificador.',
+                    'Aqueça uma frigideira com um pouco de manteiga.',
+                    'Dobre a massa em discos e doure dos dois lados.'
+                ],
+                mathNote: 'Predominância de carboidratos de rápida absorção, gerando alto índice glicêmico.'
+            },
+            {
+                id: 'panqueca-fit',
+                pairId: 2,
+                type: 'saudavel',
+                title: 'Panqueca Proteica de Banana',
+                subtitle: 'Sem farinha refinada e rica em proteínas',
+                category: 'Café da Manhã Fit',
+                image: 'https://images.unsplash.com/photo-1528207776546-3850587713f3?auto=format&fit=crop&w=600&q=80',
+                prepTime: '15 min',
+                baseServings: 2,
+                kcal: 220,
+                carbs: 32,
+                protein: 16,
+                fat: 4,
+                fiber: 4.8,
+                ingredients: [
+                    { name: 'Banana Caturra Madura', baseQty: 2, unit: 'unid' },
+                    { name: 'Ovos Inteiros', baseQty: 2, unit: 'unid' },
+                    { name: 'Farelo de Aveia', baseQty: 40, unit: 'g' },
+                    { name: 'Canela em Pó', baseQty: 5, unit: 'g' }
+                ],
+                steps: [
+                    'Amasse bem as bananas com um garfo.',
+                    'Adicione os ovos e o farelo de aveia até homogeneizar.',
+                    'Grelhe em frigideira antiaderente em fogo baixo.'
+                ],
+                mathNote: 'A razão proteína/carboidrato dobrou (de 10.7% para 50%), o que promove maior saciedade utilizando a banana como adoçante natural.'
+            }
+        ];
+
+        // Global State
+        let currentFilter = 'all';
+        let currentModalRecipe = null;
+        let currentModalServings = 1;
+
+        // Hero Section Calculators
+        let heroServingsCount = 4;
+        function updateHeroServings(delta) {
+            heroServingsCount = Math.max(1, heroServingsCount + delta);
+            document.getElementById('heroServings').innerText = heroServingsCount;
+            
+            // Base for 2 servings: 100g aveia, 25g cacau
+            const baseServings = 2;
+            const newAveia = (100 / baseServings) * heroServingsCount;
+            const newCacau = (25 / baseServings) * heroServingsCount;
+
+            document.getElementById('heroIng1').innerText = `${newAveia}g`;
+            document.getElementById('heroIng2').innerText = `${newCacau}g`;
+        }
+
+        // Render Recipe Cards
+        function renderRecipes() {
+            const grid = document.getElementById('recipesGrid');
+            grid.innerHTML = '';
+
+            const filtered = recipes.filter(r => currentFilter === 'all' || r.type === currentFilter);
+
+            filtered.forEach(recipe => {
+                const isFit = recipe.type === 'saudavel';
+                const badgeColor = isFit ? 'bg-emerald-500 text-white' : 'bg-slate-700 text-white';
+                const tagText = isFit ? 'Versão Saudável' : 'Versão Tradicional';
+
+                const card = document.createElement('div');
+                card.className = 'recipe-card bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl flex flex-col justify-between';
+                card.innerHTML = `
+                    <div>
+                        <div class="relative h-48 overflow-hidden bg-slate-100">
+                            <img src="${recipe.image}" alt="${recipe.title}" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x400/22c55e/ffffff?text=NutriMath'">
+                            <span class="absolute top-4 left-4 text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full ${badgeColor} shadow-md">
+                                ${tagText}
+                            </span>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex items-center gap-2 text-xs text-slate-400 font-semibold mb-1">
+                                <span><i class="fa-regular fa-clock"></i> ${recipe.prepTime}</span>
+                                <span>•</span>
+                                <span><i class="fa-solid fa-users"></i> ${recipe.baseServings} porções base</span>
+                            </div>
+                            <h3 class="font-bold text-xl text-slate-900 leading-snug mb-2">${recipe.title}</h3>
+                            <p class="text-xs text-slate-500 mb-4 line-clamp-2">${recipe.subtitle}</p>
+
+                            <!-- Nutritional Preview Pill -->
+                            <div class="grid grid-cols-3 gap-2 bg-slate-50 p-3 rounded-2xl text-center text-xs">
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 uppercase font-bold">Calorias</span>
+                                    <span class="font-bold text-slate-800">${recipe.kcal} kcal</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 uppercase font-bold">Carbos</span>
+                                    <span class="font-bold text-math-600">${recipe.carbs}g</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] text-slate-400 uppercase font-bold">Proteínas</span>
+                                    <span class="font-bold text-brand-600">${recipe.protein}g</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="px-6 pb-6 pt-2">
+                        <button onclick="openModal('${recipe.id}')" class="w-full bg-slate-900 hover:bg-brand-600 text-white font-bold py-3 rounded-xl text-xs transition-colors flex items-center justify-center gap-2">
+                            <span>Ver Receita & Cálculos</span>
+                            <i class="fa-solid fa-calculator text-xs"></i>
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Filter Recipes
+        function filterRecipes(type) {
+            currentFilter = type;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-white', 'text-slate-800', 'shadow-sm');
+                btn.classList.add('text-slate-600');
+            });
+            const activeBtn = document.getElementById(`btn-filter-${type}`);
+            activeBtn.classList.add('bg-white', 'text-slate-800', 'shadow-sm');
+            activeBtn.classList.remove('text-slate-600');
+            renderRecipes();
+        }
+
+        // Open Recipe Detail Modal
+        function openModal(id) {
+            currentRecipe = recipes.find(r => r.id === id);
+            if (!currentRecipe) return;
+
+            currentModalRecipe = currentRecipe;
+            currentModalServings = currentRecipe.baseServings;
+
+            document.getElementById('modalTitle').innerText = currentRecipe.title;
+            document.getElementById('modalSubtitle').innerText = currentRecipe.subtitle;
+            document.getElementById('modalCategoryBadge').innerText = currentRecipe.type === 'saudavel' ? 'Saudável' : 'Tradicional';
+            document.getElementById('modalCategoryBadge').className = `text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full inline-block ${currentRecipe.type === 'saudavel' ? 'bg-brand-500 text-white' : 'bg-slate-600 text-white'}`;
+
+            document.getElementById('modalMathNote').innerText = currentRecipe.mathNote;
+
+            // Render Steps
+            const stepsList = document.getElementById('modalSteps');
+            stepsList.innerHTML = '';
+            currentRecipe.steps.forEach(step => {
+                const li = document.createElement('li');
+                li.innerText = step;
+                stepsList.appendChild(li);
+            });
+
+            updateModalCalculations();
+
+            document.getElementById('recipeModal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close Modal
+        function closeModal() {
+            document.getElementById('recipeModal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Modal Servings Proportional Calculation (Mathematical Rule of Three)
+        function updateModalServings(delta) {
+            currentModalServings = Math.max(1, currentModalServings + delta);
+            updateModalCalculations();
+        }
+
+        function updateModalCalculations() {
+            if (!currentModalRecipe) return;
+
+            document.getElementById('modalServings').innerText = currentModalServings;
+
+            // Calculate ratio
+            const ratio = currentModalServings / currentModalRecipe.baseServings;
+
+            // Ingredients recalculation
+            const ingList = document.getElementById('modalIngredients');
+            ingList.innerHTML = '';
+
+            currentModalRecipe.ingredients.forEach(ing => {
+                const calculatedQty = (ing.baseQty * ratio).toFixed(ing.unit === 'unid' ? 0 : 1);
+                const li = document.createElement('li');
+                li.className = 'flex justify-between items-center bg-slate-50 p-2.5 rounded-xl border border-slate-100';
+                li.innerHTML = `
+                    <span class="text-slate-700">${ing.name}</span>
+                    <strong class="text-brand-700 font-bold bg-white px-2 py-0.5 rounded border border-slate-200">${calculatedQty} ${ing.unit}</strong>
+                `;
+                ingList.appendChild(li);
+            });
+
+            // Nutrition Recalculation (Values displayed per serving remain constant, but overall totals adjust)
+            document.getElementById('modalKcal').innerText = `${Math.round(currentModalRecipe.kcal)} kcal`;
+            document.getElementById('modalCarbs').innerText = `${(currentModalRecipe.carbs).toFixed(1)}g`;
+            document.getElementById('modalProtein').innerText = `${(currentModalRecipe.protein).toFixed(1)}g`;
+            document.getElementById('modalFat').innerText = `${(currentModalRecipe.fat).toFixed(1)}g`;
+            document.getElementById('modalFiber').innerText = `${(currentModalRecipe.fiber).toFixed(1)}g`;
+        }
+
+        // Smooth Scrolling helper
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Initialize App
+        window.onload = function() {
+            renderRecipes();
+        };
+    </script>
 </body>
 </html>
